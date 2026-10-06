@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycache__/ 
+# Ignore the python cache files
 *.py[codz]
 *$py.class
 
@@ -151,8 +152,10 @@ activemq-data/
 
 # Environments
 .env
+#Ignore the environment since anyone can rebuild the environment with the included list of packages
 .envrc
 .venv
+#Ignore the environment since anyone can rebuild the environment with the included list of packages
 env/
 venv/
 ENV/
