@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools >= 64.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "revcaptcha"
+version = "0.1.0"
+dependencies = []
+requires-python = ">= 3.11.9"
+authors = [
+    {name = "Edgar Snow", email = "edgarsnow572000@gmail.com"},
+]
+description = "A voice authentication system using the reverse voice captcha mechanism"
+readme = "README.md"
+keywords = ["speaker verification", "voice authentication", "lexical challenge-response", "short-utterance verification", "text-dependent authentication"]
+classifiers = [
+    "Development Status :: 1",
+    "Programming Language :: Python"
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
