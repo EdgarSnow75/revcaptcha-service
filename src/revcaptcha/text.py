@@ -1,5 +1,20 @@
 def normalize_transcript(text: str) -> list:
-    punctuation_list = [",", ".", "-", "'", "\"", "(", ")", "&", "!", "?", ";", "[", "]", "/"]
+    punctuation_list = [
+        ",",
+        ".",
+        "-",
+        "'",
+        '"',
+        "(",
+        ")",
+        "&",
+        "!",
+        "?",
+        ";",
+        "[",
+        "]",
+        "/",
+    ]
     normalized_text = text.strip().upper()
     for word in normalized_text:
         if word in punctuation_list:
@@ -8,6 +23,7 @@ def normalize_transcript(text: str) -> list:
     if normalized_text == "":
         return []
     return normalized_text
+
 
 def main():
     print(normalize_transcript("hello world!"))
