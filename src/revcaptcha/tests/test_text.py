@@ -56,7 +56,21 @@ def test_empty_string(n, expected):
         ("on- left", ["ON", "LEFT"]),
     ],
 )
-def test_whitespace_replacemnet_on_punctuation(n, expected):
+def test_whitespace_replacement_on_punctuation(n, expected):
+    assert normalize_transcript(n) == expected
+    assert normalize_transcript(n) == expected
+    assert normalize_transcript(n) == expected
+
+
+@pytest.mark.parametrize(
+    "n, expected",
+    [
+        ("left,up seven", ["LEFTUP", "SEVEN"]),
+        ("don't up", ["DONT", "UP"]),
+        ("down-up right", ["DOWNUP", "RIGHT"]),
+    ],
+)
+def test_edgecases_fail(n, expected):
     assert normalize_transcript(n) == expected
     assert normalize_transcript(n) == expected
     assert normalize_transcript(n) == expected
