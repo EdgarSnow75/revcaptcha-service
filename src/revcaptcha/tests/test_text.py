@@ -13,8 +13,6 @@ from revcaptcha.text import normalize_transcript
 )
 def test_normal_string(n, expected):
     assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
 
 
 @pytest.mark.parametrize(
@@ -27,8 +25,6 @@ def test_normal_string(n, expected):
 )
 def test_punctuation_removal(n, expected):
     assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
 
 
 @pytest.mark.parametrize(
@@ -37,14 +33,10 @@ def test_punctuation_removal(n, expected):
 )
 def test_whitespace_removal(n, expected):
     assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
 
 
 @pytest.mark.parametrize("n, expected", [("", []), (" .... ", []), ("         ", [])])
 def test_empty_string(n, expected):
-    assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
     assert normalize_transcript(n) == expected
 
 
@@ -58,8 +50,6 @@ def test_empty_string(n, expected):
 )
 def test_whitespace_replacement_on_punctuation(n, expected):
     assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
 
 
 @pytest.mark.parametrize(
@@ -71,6 +61,4 @@ def test_whitespace_replacement_on_punctuation(n, expected):
     ],
 )
 def test_edgecases_fail(n, expected):
-    assert normalize_transcript(n) == expected
-    assert normalize_transcript(n) == expected
     assert normalize_transcript(n) == expected
