@@ -37,4 +37,4 @@ cd src\revcaptcha\tests\
 pytest test_text.py
 ```
 
-All 15 tests should pass
+All 18 tests should pass
