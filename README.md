@@ -21,6 +21,7 @@ Please be noted that you must install and use python 3.11 in any environment in 
 
 You can activate the created virtual environment with venv using the command in the directory that contains the virtual environment folder:
 
+For venv:
 On Windows terminal
 ```.your-venv-name\Scripts\activate``` 
 
@@ -29,6 +30,9 @@ On Windows Powershell
 
 On macOS or Unix:
 ```source .your-venv-name/bin/activate``` 
+
+For conda:
+```conda activate your-conda-name``` 
 
 
 ### Dependencies
