@@ -7,6 +7,9 @@ A voice authentication system that uses the reverse voice CAPTCHA mechanism to a
 Firstly, I recommend setting up an virtual environment in order to not clash with your global or other packages since the project needs different versions of packages to work. 
 You can either use a Conda environment (from Anaconda 3) by typing or pasting this command at the terminal:
 
+Before you do anything, please change the current directory to the cloned folder:
+```cd .\revcaptcha-service\```
+
 ```conda create -n myenv python=3.11```
 
  You can set any env name in place of "myenv"
@@ -19,8 +22,24 @@ You can set any env name in place of ".venv"
 
 Please be noted that you must install and use python 3.11 in any environment in order for the project to work.
 
+You can activate the created virtual environment with venv using the command in the directory that contains the virtual environment folder:
+
+For venv:
+On Windows terminal
+```.your-venv-name\Scripts\activate``` 
+
+On Windows Powershell
+```.your-venv-name\Scripts\activate.ps1``` 
+
+On macOS or Unix:
+```source .your-venv-name/bin/activate``` 
+
+For conda:
+```conda activate your-conda-name``` 
+
+
 ### Dependencies
-Next, you must install the necessary requirements (including packages and dependencies) using the following command:
+After activting the virtual environment, you must install the necessary requirements (including packages and dependencies) using the following command:
 
 ```pip install .```
 
