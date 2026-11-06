@@ -19,8 +19,20 @@ You can set any env name in place of ".venv"
 
 Please be noted that you must install and use python 3.11 in any environment in order for the project to work.
 
+You can activate the created virtual environment with venv using the command in the directory that contains the virtual environment folder:
+
+On Windows terminal
+```.your-venv-name\Scripts\activate``` 
+
+On Windows Powershell
+```.your-venv-name\Scripts\activate.ps1``` 
+
+On macOS or Unix:
+```source .your-venv-name/bin/activate``` 
+
+
 ### Dependencies
-Next, you must install the necessary requirements (including packages and dependencies) using the following command:
+After activting the virtual environment, you must install the necessary requirements (including packages and dependencies) using the following command:
 
 ```pip install .```
 
