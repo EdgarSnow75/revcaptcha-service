@@ -5,18 +5,25 @@ A voice authentication system that uses the reverse voice CAPTCHA mechanism to a
 ## Setup
 ### Environment Setup
 Before you do anything, please change the current directory to the cloned folder:
-```cd .\revcaptcha-service\```
+
+```
+cd .\revcaptcha-service\
+```
 
 Firstly, I recommend setting up an virtual environment in order to not clash with your global or other packages since the project needs different versions of packages to work. 
 You can use  a venv virtual environment by typing or pasting this command at the terminal:
 
-```py -3.11 -m venv .venv```
+```
+py -3.11 -m venv .venv
+```
 
 You can set any env name in place of ".venv"
 
 If you prefer to use a Conda environment (from Anaconda 3), please use this command to setup:
 
-```conda create -n myenv python=3.11```
+```
+conda create -n myenv python=3.11
+```
 
  You can set any env name in place of "myenv"
 
@@ -27,26 +34,38 @@ You can activate the created virtual environment with venv using the command in 
 
 For venv:
 On Windows terminal
-```.your-venv-name\Scripts\activate``` 
+```
+.your-venv-name\Scripts\activate
+``` 
 
 On Windows Powershell
-```.your-venv-name\Scripts\activate.ps1``` 
+```
+.your-venv-name\Scripts\activate.ps1
+``` 
 
 On macOS or Unix:
-```source .your-venv-name/bin/activate``` 
+```
+source .your-venv-name/bin/activate
+``` 
 
 For conda:
-```conda activate your-conda-name``` 
+```
+conda activate your-conda-name
+``` 
 
 
 ### Dependencies
 After activting the virtual environment, you must install the necessary requirements (including packages and dependencies) using the following command:
 
-```pip install .```
+```
+pip install .
+```
 
 If you also want the development tools:
 
-```pip install -e ".[dev]"```
+```
+pip install -e ".[dev]"
+```
 
 ### Running the tests
 This is only for installations with development tools. Once you have completed the installation and setup, you can navigate into the tests folder by the following command:
