@@ -10,15 +10,16 @@ You can either use a Conda environment (from Anaconda 3) by typing or pasting th
 Before you do anything, please change the current directory to the cloned folder:
 ```cd .\revcaptcha-service\```
 
+```py -3.11 -m venv .venv```
+
+You can set any env name in place of ".venv"
+
+If you prefer to use conda, please use this command to setup:
+
 ```conda create -n myenv python=3.11```
 
  You can set any env name in place of "myenv"
 
-If you prefer to use venv, please use this command to setup:
-
-```py -3.11 -m venv .venv```
-
-You can set any env name in place of ".venv"
 
 Please be noted that you must install and use python 3.11 in any environment in order for the project to work.
 
