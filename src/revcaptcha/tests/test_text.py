@@ -7,8 +7,10 @@ from revcaptcha.text import normalize_transcript
     "n, expected",
     [
         ("up, left!", ["UP", "LEFT"]),
-        ("DOWN! OFF.", ["DOWN", "OFF"]),
-        ("on off", ["ON", "OFF"]),
+        ("kay gee em eight em", ["K", "G", "M", "8", "M"]),
+        ("5G5LB", ["5", "G", "5", "L", "B"]),
+        ("won to for", ["1", "2", "4"]),
+        ("seven", ["7"]),
     ],
 )
 def test_normal_string(n, expected):
@@ -18,9 +20,11 @@ def test_normal_string(n, expected):
 @pytest.mark.parametrize(
     "n, expected",
     [
-        ("up,,, left!!!!", ["UP", "LEFT"]),
+        ("Five, G, five, L, B.", ["5", "G", "5", "L", "B"]),
         ("....", []),
         (",,,...on! ...,,,left--!-", ["ON", "LEFT"]),
+        ("Double-u, 3, Z.", ["W", "3", "Z"]),
+        ("five,G", ["5", "G"]),
     ],
 )
 def test_punctuation_removal(n, expected):
@@ -44,7 +48,7 @@ def test_empty_string(n, expected):
     "n, expected",
     [
         ("up,,, left!!!!", ["UP", "LEFT"]),
-        ("seven. .six,,,", ["SEVEN", "SIX"]),
+        ("seven. .six,,,", ["7", "6"]),
         ("on- left", ["ON", "LEFT"]),
     ],
 )
@@ -55,10 +59,11 @@ def test_whitespace_replacement_on_punctuation(n, expected):
 @pytest.mark.parametrize(
     "n, expected",
     [
-        ("left,up seven", ["LEFTUP", "SEVEN"]),
-        ("don't up", ["DONT", "UP"]),
-        ("down-up right", ["DOWNUP", "RIGHT"]),
+        ("left,up seven", ["LEFT", "UP", "7"]),
+        ("don't up", ["DON", "T", "UP"]),
+        ("down-up right", ["DOWN", "UP", "RIGHT"]),
+        ("5 G 5 L B ครับ", ["5", "G", "5", "L", "B", "ครับ"]),
     ],
 )
-def test_edgecases_fail(n, expected):
+def test_edgecases(n, expected):
     assert normalize_transcript(n) == expected
