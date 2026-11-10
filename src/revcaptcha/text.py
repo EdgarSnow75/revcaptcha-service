@@ -31,7 +31,9 @@ def normalize_transcript(text: str) -> list[str]:
         "SIX": "6",
         "SEVEN": "7",
         "EIGHT": "8",
+        "ATE": "8",
         "NINE": "9",
+        "BE": "B",
         "BEE": "B",
         "SEE": "C",
         "SEA": "C",
@@ -97,6 +99,16 @@ def normalize_transcript(text: str) -> list[str]:
     return normalized_text
 
 
+def change_list_to_str(text_list: list[str]) -> str:
+    return "".join(text_list)
+
+
+def lexical_match(transcript: str, code: str) -> bool:
+    transcript = normalize_transcript(transcript)
+    transcript = change_list_to_str(transcript)
+    return transcript == code
+
+
 def main():
     # print(normalize_transcript("hello world!"))
     # print(normalize_transcript("   hello     hi,  .  okay!"))
@@ -107,6 +119,7 @@ def main():
     # print(normalize_transcript("ZEE K 1 AITCH 8"))
     # print(normalize_transcript("5G5LB"))
     print(normalize_transcript("SEVEN"))
+    print(change_list_to_str(["5", "G", "5", "L", "B"]))
 
 
 if __name__ == "__main__":
