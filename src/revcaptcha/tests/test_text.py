@@ -67,3 +67,15 @@ def test_whitespace_replacement_on_punctuation(n, expected):
 )
 def test_edgecases(n, expected):
     assert normalize_transcript(n) == expected
+
+
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("3 double u Z", ["3", "W", "Z"]),
+        ("K, double you, 7", ["K", "W", "7"]),
+        ("A B double u", ["A", "B", "W"]),
+    ],
+)
+def test_correct_replacement(raw, expected):
+    assert normalize_transcript(raw) == expected
