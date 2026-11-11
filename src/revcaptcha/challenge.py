@@ -1,18 +1,14 @@
 """Generate randomized alphanumeric challenges of 5 letters or more using a decent randomizer"""
 
-import secrets, random
-
+import secrets
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 ALPHABET = "ABCDEFGHIJKLMNPQRSTUVWXYZ"
 NUMBERS = "0123456789"
 CODE_LENGTH = 5
 ANSWER_WINDOW = timedelta(seconds=10)
-T0 = datetime(2026, 11, 11, 0, tzinfo=timezone.utc)
-random.seed(7)
-
-RANDOM_LIST = []
+T0 = datetime(2026, 11, 11, 0, tzinfo=UTC)
 
 
 @dataclass(frozen=True)
@@ -28,24 +24,6 @@ def create_challenge(rng, now: datetime) -> Challenge:
         raise ValueError("Now is naive time. Does not have a timezone.")
 
     created_code = ""
-    # Old logic
-    # digit_repeat = True
-    # last_chara = ""
-    # while len(created_code) < CODE_LENGTH:
-    #     if digit_repeat:
-    #         chosen_word = rng.choice(ALPHABET + NUMBERS)
-    #         if chosen_word == last_chara:
-    #             continue
-    #         if chosen_word in NUMBERS:
-    #             digit_repeat = False
-    #         created_code += chosen_word
-    #     else:
-    #         chosen_word = rng.choice(ALPHABET)
-    #         if chosen_word == last_chara:
-    #             continue
-    #         digit_repeat = True
-    #         created_code += chosen_word
-    #     last_chara = created_code[-1]
     while True:
         created_code = "".join(rng.choices(ALPHABET + NUMBERS, k=CODE_LENGTH))
         if is_valid_code(created_code):
@@ -88,18 +66,7 @@ def is_expired(challenge: Challenge, now: datetime) -> bool:
     return now > challenge.expires_at
 
 
-def main():
-    for _ in range(10000):
-        c = create_challenge(random.Random(), T0)
-        if is_valid_code(c.code):
-            RANDOM_LIST.append(c.code)
-        else:
-            return print(f"The code is not valid: {c.code}")
-    print(RANDOM_LIST)
-    # c = create_challenge(random.Random(), T0)
-    # d = create_challenge(random.Random(), T0)
-    # print(c.id)
-    # print(d.id)
+def main(): ...
 
 
 if __name__ == "__main__":
