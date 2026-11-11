@@ -61,9 +61,17 @@ def test_answer_window_is_10():
 
 @pytest.mark.parametrize("n, expected", [(1000, True), (10000, True)])
 def test_code_validity(n, expected):
+    starts_with_digit = 0
+    duplicate_chara = False
     for _ in range(n):
         c = create_challenge(random.Random(), T0)
         assert is_valid_code(c.code) == expected
+        if c.code[0] in NUMBERS:
+            starts_with_digit += 1
+        if len(c.code) != len(set(c.code)):
+            duplicate_chara = True
+    assert duplicate_chara
+    assert 22.0 <= ((starts_with_digit / n) * 100) <= 27.0
 
 
 def test_is_expired():
@@ -71,6 +79,7 @@ def test_is_expired():
     tick = timedelta(microseconds=1)
     assert is_expired(c, c.expires_at - tick) == False
     assert is_expired(c, c.expires_at + tick) == True
+    assert is_expired(c, c.expires_at) == False
 
 
 def test_naive_time():
