@@ -1,3 +1,54 @@
+NORMALIZATION_MAP = {
+    "ZERO": "0",
+    "OH": "0",
+    "O": "0",
+    "ONE": "1",
+    "WON": "1",
+    "TWO": "2",
+    "TO": "2",
+    "TOO": "2",
+    "THREE": "3",
+    "FOUR": "4",
+    "FOR": "4",
+    "FIVE": "5",
+    "SIX": "6",
+    "SEVEN": "7",
+    "EIGHT": "8",
+    "ATE": "8",
+    "NINE": "9",
+    "BE": "B",
+    "BEE": "B",
+    "SEE": "C",
+    "SEA": "C",
+    "DEE": "D",
+    "EF": "F",  # Check
+    "GEE": "G",
+    "AITCH": "H",  # Re-add double meaning from proposal
+    "EYE": "I",
+    "JAY": "J",
+    "KAY": "K",
+    "EL": "L",
+    "EM": "M",
+    "EN": "N",
+    "PEE": "P",
+    "PEA": "P",
+    "QUEUE": "Q",
+    "CUE": "Q",
+    "ARE": "R",
+    "ES": "S",
+    "TEE": "T",
+    "TEA": "T",
+    "YOU": "U",
+    "VEE": "V",
+    "DOUBLE U": "W",
+    "DOUBLE YOU": "W",
+    "EX": "X",
+    "WHY": "Y",
+    "ZEE": "Z",
+    "ZED": "Z",
+}
+
+
 def normalize_transcript(text: str) -> list[str]:
     punctuation_list = [
         ",",
@@ -15,54 +66,6 @@ def normalize_transcript(text: str) -> list[str]:
         "]",
         "/",
     ]
-    normalization_map = {
-        "Zero": "0",
-        "OH": "0",
-        "O": "0",
-        "ONE": "1",
-        "WON": "1",
-        "TWO": "2",
-        "TO": "2",
-        "TOO": "2",
-        "THREE": "3",
-        "FOUR": "4",
-        "FOR": "4",
-        "FIVE": "5",
-        "SIX": "6",
-        "SEVEN": "7",
-        "EIGHT": "8",
-        "ATE": "8",
-        "NINE": "9",
-        "BE": "B",
-        "BEE": "B",
-        "SEE": "C",
-        "SEA": "C",
-        "DEE": "D",
-        "EF": "F",  # Check
-        "GEE": "G",
-        "AITCH": "H",  # Re-add double meaning from proposal
-        "JAY": "J",
-        "KAY": "K",
-        "EL": "L",
-        "EM": "M",
-        "EN": "N",
-        "PEE": "P",
-        "PEA": "P",
-        "QUEUE": "Q",
-        "CUE": "Q",
-        "ARE": "R",
-        "ES": "S",
-        "TEE": "T",
-        "TEA": "T",
-        "YOU": "U",
-        "VEE": "V",
-        "DOUBLE U": "W",
-        "DOUBLE YOU": "W",
-        "EX": "X",
-        "WHY": "Y",
-        "ZEE": "Z",
-        "ZED": "Z",
-    }
 
     normalized_text = text.strip().upper()
     for word in normalized_text:
@@ -70,32 +73,29 @@ def normalize_transcript(text: str) -> list[str]:
             normalized_text = normalized_text.replace(word, " ")
     if " " in normalized_text:
         normalized_text = normalized_text.split()
-    elif normalized_text not in normalization_map:
+    elif normalized_text not in NORMALIZATION_MAP:
         normalized_text = list(normalized_text)
     else:
-        return [normalization_map[normalized_text]]
+        return [NORMALIZATION_MAP[normalized_text]]
 
     l, r = 0, 1
     while l < len(normalized_text):
         r = l + 1
         current_text = normalized_text[l]
-        if normalized_text[l] in normalization_map:
+        if normalized_text[l] in NORMALIZATION_MAP:
             normalized_text.pop(l)
-            normalized_text.insert(l, normalization_map[current_text])
+            normalized_text.insert(l, NORMALIZATION_MAP[current_text])
             l += 1
             continue
         while r < len(normalized_text):
-            if current_text in normalization_map:
-                for _ in range(l, r):
-                    normalized_text.pop(0)
-                normalized_text.insert(l, normalization_map[current_text])
-                break
             current_text += " " + normalized_text[r]
+            if current_text in NORMALIZATION_MAP:
+                for _ in range(r - l + 1):
+                    normalized_text.pop(l)
+                normalized_text.insert(l, NORMALIZATION_MAP[current_text])
+                break
             r += 1
         l += 1
-
-    # if normalized_text == "":
-    #     return []
     return normalized_text
 
 
