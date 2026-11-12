@@ -66,7 +66,8 @@ def is_expired(challenge: Challenge, now: datetime) -> bool:
     return now > challenge.expires_at
 
 
-def main(): ...
+def main():
+    print(create_challenge(secrets.SystemRandom(), T0).code)
 
 
 if __name__ == "__main__":
