@@ -23,7 +23,6 @@ def load_audio(path) -> np.array:
     path = Path(path)
     if not path.exists():
         raise AudioError(f"Audio File not found: {path}")
-
     try:
         audio_info = sf.info(path)
     except sf.SoundFileError as err:
@@ -56,7 +55,7 @@ def resample_khz(audio, sample_rate):
 
 
 def main():
-    load_audio("../../data/samples/edgar_VKR2E_stereo.wav")
+    print(load_audio("../../data/samples/edgar_VKR2E_stereo.wav"))
 
 
 if __name__ == "__main__":
