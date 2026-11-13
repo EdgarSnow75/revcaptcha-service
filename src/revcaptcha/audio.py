@@ -40,7 +40,7 @@ def load_audio(path) -> np.ndarray:
 
 
 def convert_to_mono(audio):
-    if audio.ndim == 2:
+    if audio.ndim >= 2:
         return np.mean(audio, axis=1)
     return audio
 
