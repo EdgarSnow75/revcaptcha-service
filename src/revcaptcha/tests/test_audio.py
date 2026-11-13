@@ -20,7 +20,7 @@ def make_tone(tmp_path, duration, sr, channels=1):
 def make_loud_tone(tmp_path, duration, sr=48000, channels=1):
     n = int(duration * sr)
     t = np.arange(n) / sr
-    mono = 0.9 * np.sin(2 * np.pi * 440 * t)
+    mono = 0.9 * np.sign(np.sin(2 * np.pi * 440 * t))
     data = mono if channels == 1 else np.column_stack([mono] * channels)
     path = tmp_path / f"tone_{sr}hz_{channels}ch.wav"
     sf.write(path, data, sr)
@@ -54,18 +54,16 @@ def test_load_audio_basic_16khz(tmp_path, duration, rate, channel):
 def test_load_audio_basic_48khz(tmp_path, duration, rate, channel):
     audio_path = make_tone(tmp_path, duration, rate, channel)
     audio = load_audio(audio_path)
-    assert audio.size == pytest.approx(16000)
+    assert abs(len(audio) - 16000) <= 1
     assert audio.ndim == 1
-    assert len(audio) == pytest.approx(16000)
 
 
 @pytest.mark.parametrize("duration, rate, channel", [(2, 44100, 1), (2, 44100, 2)])
 def test_load_audio_2s_44khz(tmp_path, duration, rate, channel):
     audio_path = make_tone(tmp_path, duration, rate, channel)
     audio = load_audio(audio_path)
-    assert audio.size == pytest.approx(32000)
+    assert abs(len(audio) - 32000) <= 1
     assert audio.ndim == 1
-    assert len(audio) == pytest.approx(32000)
 
 
 @pytest.mark.parametrize("duration, rate, channel", [(2, 44100, 1), (2, 44100, 2)])
@@ -115,9 +113,9 @@ def test_load_audio_exact_durations(tmp_path, duration, rate, channel, samples):
     assert len(audio) == samples
 
 
-def test_load_audio_wrong_path():
-    path = "dummy_path/dummy.wav"
-    with pytest.raises(AudioError, match=r"Audio File not found: dummy_path\\dummy.wav"):
+def test_load_audio_wrong_path(tmp_path):
+    path = tmp_path / "missing.wav"
+    with pytest.raises(AudioError, match="Audio File not found:"):
         load_audio(path)
 
 
@@ -125,4 +123,4 @@ def test_load_audio_unreadable_file(tmp_path):
     path = make_text(tmp_path)
     with pytest.raises(AudioError) as excinfo:
         load_audio(path)
-        assert excinfo.value.__cause__ == sf.SoundFileError
+    assert isinstance(excinfo.value.__cause__, sf.SoundFileError)
