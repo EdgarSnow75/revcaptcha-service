@@ -14,8 +14,6 @@ from revcaptcha.challenge import (
 
 T0 = datetime(2026, 11, 11, 0, tzinfo=UTC)
 
-random.seed(7)
-
 
 def test_alphabet_len():
     assert len(ALPHABET) == 25
@@ -63,8 +61,9 @@ def test_answer_window_is_10():
 def test_code_validity(n, expected):
     starts_with_digit = 0
     duplicate_chara = False
+    rng = random.Random(7)
     for _ in range(n):
-        c = create_challenge(random.Random(), T0)
+        c = create_challenge(rng, T0)
         assert is_valid_code(c.code) == expected
         if c.code[0] in NUMBERS:
             starts_with_digit += 1
