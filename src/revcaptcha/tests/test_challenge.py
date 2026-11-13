@@ -57,7 +57,7 @@ def test_answer_window_is_10():
     assert c.expires_at - c.issued_at == timedelta(seconds=10)
 
 
-@pytest.mark.parametrize("n, expected", [(1000, True), (10000, True)])
+@pytest.mark.parametrize("n, expected", [(10000, True), (100000, True)])
 def test_code_validity(n, expected):
     starts_with_digit = 0
     duplicate_chara = False
