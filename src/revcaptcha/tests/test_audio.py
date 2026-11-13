@@ -1,8 +1,10 @@
+from pathlib import Path
+
 import numpy as np
+import pytest
 import soundfile as sf
 
-import pytest
-from pathlib import Path
+from revcaptcha.audio import load_audio
 
 
 def make_tone(tmp_path, duration, sr, channels=1):
@@ -27,3 +29,30 @@ def test_make_tone(tmp_path, duration, rate, channel):
     audio_path = make_tone(tmp_path, duration=duration, sr=rate, channels=channel)
     audio_info = sf.info(audio_path)
     assert audio_info.channels == channel
+
+
+@pytest.mark.parametrize("duration, rate, channel", [(1, 16000, 1), (1, 16000, 2)])
+def test_load_audio_basic_16khz(tmp_path, duration, rate, channel):
+    audio_path = make_tone(tmp_path, duration, rate, channel)
+    audio = load_audio(audio_path)
+    assert audio.size == 16000
+    assert audio.ndim == 1
+    assert len(audio) == 16000
+
+
+@pytest.mark.parametrize("duration, rate, channel", [(1, 48000, 1), (1, 48000, 2)])
+def test_load_audio_basic_48khz(tmp_path, duration, rate, channel):
+    audio_path = make_tone(tmp_path, duration, rate, channel)
+    audio = load_audio(audio_path)
+    assert audio.size == pytest.approx(16000)
+    assert audio.ndim == 1
+    assert len(audio) == pytest.approx(16000)
+
+
+@pytest.mark.parametrize("duration, rate, channel", [(2, 44100, 1), (2, 44100, 2)])
+def test_load_audio_2s_44khz(tmp_path, duration, rate, channel):
+    audio_path = make_tone(tmp_path, duration, rate, channel)
+    audio = load_audio(audio_path)
+    assert audio.size == pytest.approx(32000)
+    assert audio.ndim == 1
+    assert len(audio) == pytest.approx(32000)
