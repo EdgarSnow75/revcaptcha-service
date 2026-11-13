@@ -1,9 +1,9 @@
 # revcaptcha-service
 
-A voice authentication system that uses the reverse voice CAPTCHA mechanism to authenticate users. It uses a two-stage sequential design which uses a lexical-matching stage and identity-matching stage to verify an authentication attempt. A user must enroll to the system by providing 3 to 10 voice recordings which are used as an enrollment centroid\vocal profile of that user. In an authentication attempt, the user first have to read out each letter of a randomized text prompt that the system provides to them. The lexical gate checks if the content of the user's audio and the randomized text prompt matches exactly. If so, the response audio will move on to the next stage, speaker verification. In speaker verification, a pre-trained speaker embedding model will turn the response audio into a fixed-length embedding. This embedding is scored against the target user's enrollment centroid embedding using cosine similarity. If the score is equal to higher than the threshold, that attempt is authenticated.
+A voice authentication system that uses the reverse voice CAPTCHA mechanism to authenticate users. It uses a two-stage sequential design which uses a lexical-matching stage and identity-matching stage to verify an authentication attempt. A user must enroll to the system by providing 3 to 10 voice recordings which are used as an enrollment centroid\vocal profile of that user. In an authentication attempt, the user first have to read out each letter of a randomized 5-character alphanumeric prompt that the system provides to them. The user must read out this prompt in 10 seconds. The lexical gate checks if the content of the user's audio and the randomized text prompt matches exactly. If so, the response audio will move on to the next stage, speaker verification. In speaker verification, a pre-trained speaker embedding model will turn the response audio into a fixed-length embedding. This embedding is scored against the target user's enrollment centroid embedding using cosine similarity. If the score is equal to higher than the threshold, that attempt is authenticated.
 
 ## Setup
-### Environment Setup
+### Environment setup
 Before you do anything, please change the current directory to the cloned folder:
 
 ```
@@ -67,7 +67,44 @@ If you also want the development tools:
 pip install -e ".[dev]"
 ```
 
-### Running the tests
+## What works so far
+### Code Generator
+- Generates a randomized 5-character alphanumeric code using a securer randomizer seed
+- Generates the code with a fair chance for all possible combinations
+
+```
+cd .\revcaptcha-service\src\revcaptcha\
+python challenge.py
+```
+
+### Character Normalizer
+- Normalizes the transcribed text from the user using the NORMALIZATION_MAP
+- Strips the transcribed text of any whitesapces
+- Removes common punctuation from the transcribed text
+
+```
+cd .\revcaptcha-service\src\revcaptcha\
+python text.py
+```
+
+### Lexical Matcher
+- Checks for an exact lexical match between the normalized transcribed text and the prompt text
+```
+cd .\revcaptcha-service\src\revcaptcha\
+python text.py
+```
+
+### Audio Loader
+- Converts a valid audio file between 0.5s and 15.0s duration to a mono-channel 16khz ndarray
+- Error handling for audio duration not between 0.5s and 15.0s, unreadable files, files not existing
+- Clips the maximum and minimum absolute values to 1 and -1 respectively using np.clip
+- Converts any multi-channel audio to mono-channel using np.mean
+```
+cd .\revcaptcha-service\src\revcaptcha\
+python audio.py
+```
+
+## Running the tests
 This is only for installations with development tools. Once you have completed the installation and setup, you can navigate into the tests folder by the following command:
 
 For Windows:
