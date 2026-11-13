@@ -12,14 +12,10 @@ LONGEST_DUR = 15.0
 
 
 class AudioError(Exception):
-    """Raised when there is an audio error: missing files, duration shorter than 0.5s or longer than 15s or file is unreadable
-
-    Args:
-        Exception (any): Any exception returned from soundfile and others
-    """
+    """Raised when there is an audio error: missing files, duration shorter than 0.5s or longer than 15s or file is unreadable"""
 
 
-def load_audio(path) -> np.array:
+def load_audio(path) -> np.ndarray:
     path = Path(path)
     if not path.exists():
         raise AudioError(f"Audio File not found: {path}")
@@ -55,7 +51,8 @@ def resample_khz(audio, sample_rate):
 
 
 def main():
-    print(load_audio("../../data/samples/edgar_VKR2E_stereo.wav"))
+    # print(load_audio("../../data/samples/edgar_VKR2E_stereo.wav"))
+    ...
 
 
 if __name__ == "__main__":
