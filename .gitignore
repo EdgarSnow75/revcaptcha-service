@@ -1,5 +1,8 @@
 #Ignore recordings
-data/
+/data/
+
+#Ignore expirimental scripts
+/scratch/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/ 
