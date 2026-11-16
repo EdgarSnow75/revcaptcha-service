@@ -31,3 +31,7 @@ dev = ["pytest", "ruff"]
 [tool.ruff]
 line-length = 89
 target-version = "py311"
+
+[tool.pytest.ini_options]
+markers = [ "slow: loads a real model (run with: pytest -m slow)"]
+addopts = "-m 'not slow'"
