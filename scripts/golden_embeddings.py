@@ -1,8 +1,8 @@
 import json
+from pathlib import Path
+
 import torch
 import torch.nn.functional as F
-
-from pathlib import Path
 
 from revcaptcha.speaker import CamppEmbedder
 
