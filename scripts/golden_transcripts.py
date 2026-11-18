@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 from revcaptcha.asr import WhisperTranscriber
-from revcaptcha.audio import check_samples, load_audio
+from revcaptcha.audio import load_audio
 
 
 def check_transcript_match():
@@ -38,6 +38,7 @@ def check_transcript_match():
                 print("DIFF")
             print("----------------------------", end="\n")
         print(f"Count: {count} out of {sample_range} matches")
+        return filtered_data[:10]
 
 
-check_transcript_match()
+print(check_transcript_match())
