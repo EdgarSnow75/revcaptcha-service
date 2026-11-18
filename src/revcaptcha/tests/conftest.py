@@ -1,6 +1,6 @@
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 from revcaptcha.asr import WhisperTranscriber
 from revcaptcha.speaker import CamppEmbedder

@@ -1,7 +1,7 @@
-import torch
-import numpy as np
-
 from typing import Protocol
+
+import numpy as np
+import torch
 
 from revcaptcha.audio import check_samples, load_audio
 

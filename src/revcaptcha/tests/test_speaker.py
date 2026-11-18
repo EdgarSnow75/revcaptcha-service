@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import torch
 
-from revcaptcha.speaker import CamppEmbedder, Embedder
+from revcaptcha.speaker import Embedder
 from revcaptcha.tests.fakes import FakeEmbedder
 
 
