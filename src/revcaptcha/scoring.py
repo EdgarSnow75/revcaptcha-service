@@ -1,16 +1,15 @@
 import numpy as np
 
 THRESHOLDS = {5: 0.5387, 10: 0.5669}  # JCSSE TRACK H CAM++ OP-B over 5 Folds
+DEFAULT_THRESHOLD = THRESHOLDS[5]
 
 
 def build_profile(embeddings) -> np.ndarray:
-    for embedding in embeddings:
-        if embedding.size == 0:
-            raise ValueError("There is an empty array")
     profile = np.stack(embeddings)
-    profile = np.mean(profile, axis=0) / profile.shape[1]
+    profile = np.mean(profile, axis=0)
     if not np.any(profile):
         raise ValueError("Zeroes cannot be divided")
+    profile = profile / np.linalg.norm(profile)
     return profile
 
 
@@ -18,6 +17,7 @@ def cosine_score(profile, embedding) -> float:
     score = np.dot(profile, embedding) / (
         np.linalg.norm(profile) * np.linalg.norm(embedding)
     )
+    score = float(score)
     return score
 
 
