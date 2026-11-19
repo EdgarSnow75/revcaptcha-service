@@ -41,4 +41,9 @@ def check_transcript_match():
         return filtered_data[:10]
 
 
-print(check_transcript_match())
+def main():
+    print(check_transcript_match())
+
+
+if __name__ == "__main__":
+    main()
