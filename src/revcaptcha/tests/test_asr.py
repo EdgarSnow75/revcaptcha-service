@@ -26,9 +26,8 @@ def test_check_fake_trans():
         ("012c8314_eight.wav", ["8"]),
     ],
 )
-def test_whiper_transcriber(call_whisper_model, file_name, expected):
+def test_whiper_transcriber(whisper_model_fixture, file_name, expected):
     path = Path(__file__).parent / "data" / file_name
-    # print(path)
     audio = load_audio(path)
-    transcript = call_whisper_model.transcribe(audio)
+    transcript = whisper_model_fixture.transcribe(audio)
     assert normalize_transcript(transcript) == expected

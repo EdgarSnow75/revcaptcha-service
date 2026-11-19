@@ -7,12 +7,12 @@ from revcaptcha.speaker import CamppEmbedder
 
 
 @pytest.fixture(scope="session")
-def call_whisper_model():
+def whisper_model_fixture():
     return WhisperTranscriber()
 
 
 @pytest.fixture(scope="session")
-def call_embed_model():
+def embedder_model_fixture():
     model_dir = Path(__file__).resolve().parents[3] / "models" / "campplus"
     if not model_dir.exists():
         pytest.skip("Model directory does not exits")
