@@ -14,7 +14,6 @@ NORMALIZATION_MAP = {
     "SIX": "6",
     "SEVEN": "7",
     "EIGHT": "8",
-    "HEY": "8",
     "ATE": "8",
     "NINE": "9",
     "BE": "B",
