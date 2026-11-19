@@ -61,9 +61,7 @@ def check_samples(samples):
         raise ValueError("The sample array is empty")
 
 
-def main():
-    # print(load_audio("../../data/samples/edgar_VKR2E_stereo.wav"))
-    print(check_samples([1.0, 2.0, 3.0]))
+def main(): ...
 
 
 if __name__ == "__main__":
