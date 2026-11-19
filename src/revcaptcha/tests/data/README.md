@@ -7,7 +7,7 @@ Paper: [Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition](ht
 # Files
 seven/004ae714_nohash_1.wav
 eight/012c8314_nohash_1.wav
-fight/00b01445_nohash_1.wav
+five/00b01445_nohash_1.wav
 down/cce7416f_nohash_0.wav
 eight/cce7416f_nohash_0.wav
 five/cce7416f_nohash_0.wav
