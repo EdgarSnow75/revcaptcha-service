@@ -2,11 +2,11 @@ import numpy as np
 
 
 class FakeTranscriber:
-    def __init__(self, samples):
-        self.samples = samples
+    def __init__(self, text):
+        self.text = text
 
     def transcribe(self, samples: np.ndarray) -> str:
-        return self.samples
+        return self.text
 
 
 class FakeEmbedder:
