@@ -6,7 +6,7 @@ from revcaptcha.audio import check_samples
 
 
 class Transcriber(Protocol):
-    def transcribe(self, samples: np.ndarray) -> np.ndarray: ...
+    def transcribe(self, samples: np.ndarray) -> str: ...
 
 
 class WhisperTranscriber:
