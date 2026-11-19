@@ -145,7 +145,7 @@ def test_check_sample_pass(test_array):
         (np.array([[1, 2, 3], [4, 5, 6]])),
         (np.ones(5, dtype="int16")),
         (np.ones(5, dtype="float64")),
-        (np.array([])),
+        (np.array([], dtype="float32")),
         ("../../../data/samples/resampled_16khz.wav"),
     ],
 )
