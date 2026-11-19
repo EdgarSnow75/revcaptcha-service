@@ -4,7 +4,13 @@ import numpy as np
 import pytest
 import soundfile as sf
 
-from revcaptcha.audio import LONGEST_DUR, SHORTEST_DUR, AudioError, load_audio
+from revcaptcha.audio import (
+    LONGEST_DUR,
+    SHORTEST_DUR,
+    AudioError,
+    check_samples,
+    load_audio,
+)
 
 
 def make_tone(tmp_path, duration, sr, channels=1):
@@ -124,3 +130,25 @@ def test_load_audio_unreadable_file(tmp_path):
     with pytest.raises(AudioError) as excinfo:
         load_audio(path)
     assert isinstance(excinfo.value.__cause__, sf.SoundFileError)
+
+
+# Check_sample
+@pytest.mark.parametrize("test_array", [(np.zeros(5, dtype="float32"))])
+def test_check_sample_pass(test_array):
+    check_samples(test_array)
+
+
+@pytest.mark.parametrize(
+    "test_array",
+    [
+        ([0.1, 0.2, 0.3]),
+        (np.array([[1, 2, 3], [4, 5, 6]])),
+        (np.ones(5, dtype="int16")),
+        (np.ones(5, dtype="float64")),
+        (np.array([], dtype="float32")),
+        ("../../../data/samples/resampled_16khz.wav"),
+    ],
+)
+def test_check_sample_fail(test_array):
+    with pytest.raises(ValueError):
+        check_samples(test_array)

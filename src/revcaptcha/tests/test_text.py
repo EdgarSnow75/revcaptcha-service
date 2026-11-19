@@ -50,6 +50,8 @@ def test_empty_string(n, expected):
         ("up,,, left!!!!", ["UP", "LEFT"]),
         ("seven. .six,,,", ["7", "6"]),
         ("on- left", ["ON", "LEFT"]),
+        ("Seven.", ["7"]),
+        ("8.", ["8"]),
     ],
 )
 def test_whitespace_replacement_on_punctuation(n, expected):

@@ -119,9 +119,12 @@ def main():
     # print(normalize_transcript("ZEE K 1 AITCH 8"))
     # print(normalize_transcript("5G5LB"))
     # print(normalize_transcript("SEVEN"))
+    print(normalize_transcript("S E V E N"))
+    print(normalize_transcript("F I V E N"))
+    print(normalize_transcript("E I G H T"))
     # print(change_list_to_str(["5", "G", "5", "L", "B"]))
-    print(lexical_match("XCR9J", "XCR9J"))
-    print(lexical_match("4H1VJ", "XCR9J"))
+    # print(lexical_match("XCR9J", "XCR9J"))
+    # print(lexical_match("4H1VJ", "XCR9J"))
 
 
 if __name__ == "__main__":

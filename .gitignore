@@ -1,5 +1,11 @@
 #Ignore recordings
-data/
+/data/
+
+#Ignore expirimental scripts
+/scratch/
+
+#Ignore models
+/models/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/ 

@@ -8,7 +8,16 @@ version = "0.1.0"
 dependencies = [
     "numpy",
     "soundfile",
-    "soxr"
+    "soxr",
+    "torch==2.8.0",
+    "torchaudio==2.8.0",
+    "openai-whisper==20250625",
+    "wespeaker @ git+https://github.com/wenet-e2e/wespeaker.git@c92349a14d6b426808c4e09b8b12e076864dfc11",
+    "PyYAML==6.0.3",
+    "onnxruntime==1.24.4",
+    "s3prl==0.4.18",
+    "transformers==5.5.0",
+    "peft==0.18.1",
 ]
 requires-python = ">= 3.11.9"
 authors = [
@@ -28,3 +37,7 @@ dev = ["pytest", "ruff"]
 [tool.ruff]
 line-length = 89
 target-version = "py311"
+
+[tool.pytest.ini_options]
+markers = [ "slow: loads a real model (run with: pytest -m slow)"]
+addopts = "-m 'not slow'"

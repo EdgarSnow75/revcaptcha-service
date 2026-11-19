@@ -50,9 +50,18 @@ def resample_khz(audio, sample_rate):
     return out
 
 
-def main():
-    # print(load_audio("../../data/samples/edgar_VKR2E_stereo.wav"))
-    ...
+def check_samples(samples):
+    if isinstance(samples, np.ndarray) != True:
+        raise ValueError("The samples is not a ndarray")
+    elif samples.ndim != 1:
+        raise ValueError("The sample's ndim is not 1-D")
+    elif samples.dtype != "float32":
+        raise ValueError("The sample's ndtype is not float32")
+    elif samples.size == 0:
+        raise ValueError("The sample array is empty")
+
+
+def main(): ...
 
 
 if __name__ == "__main__":
