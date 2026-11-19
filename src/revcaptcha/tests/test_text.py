@@ -50,6 +50,8 @@ def test_empty_string(n, expected):
         ("up,,, left!!!!", ["UP", "LEFT"]),
         ("seven. .six,,,", ["7", "6"]),
         ("on- left", ["ON", "LEFT"]),
+        ("Seven.", ["7"]),
+        ("8.", ["8"]),
     ],
 )
 def test_whitespace_replacement_on_punctuation(n, expected):
@@ -63,8 +65,6 @@ def test_whitespace_replacement_on_punctuation(n, expected):
         ("don't up", ["DON", "T", "UP"]),
         ("down-up right", ["DOWN", "UP", "RIGHT"]),
         ("5 G 5 L B ครับ", ["5", "G", "5", "L", "B", "ครับ"]),
-        ("SEVEN", ["7"]),
-        ("EIGHT", ["8"]),
     ],
 )
 def test_edgecases(n, expected):
