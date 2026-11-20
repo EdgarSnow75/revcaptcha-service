@@ -57,10 +57,10 @@ def check_map_results():
                     and word not in multi_word_parts
                 ):
                     failures[word] += 1
-                if word in failure_examples:
-                    failure_examples[word].append((code, raw_transcript))
-                else:
-                    failure_examples[word] = [(code, raw_transcript)]
+                    if word in failure_examples:
+                        failure_examples[word].append((code, raw_transcript))
+                    else:
+                        failure_examples[word] = [(code, raw_transcript)]
     pass_rate = pass_count / total_count * 100
     print(
         "-------------------------------------------------------------------------------------"
