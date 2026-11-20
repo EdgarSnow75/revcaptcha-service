@@ -27,11 +27,14 @@ NORMALIZATION_MAP = {
     "EYE": "I",
     "JAY": "J",
     "KAY": "K",
+    "KEI": "K",
     "EL": "L",
     "EM": "M",
+    "AND": "N",
     "EN": "N",
     "PEE": "P",
     "PEA": "P",
+    "KYUU": "Q",
     "QUEUE": "Q",
     "CUE": "Q",
     "ARE": "R",
@@ -44,40 +47,14 @@ NORMALIZATION_MAP = {
     "DOUBLE YOU": "W",
     "EX": "X",
     "WHY": "Y",
+    "SET": "Z",
     "ZEE": "Z",
     "ZED": "Z",
 }
 
 
 def normalize_transcript(text: str) -> list[str]:
-    punctuation_list = [
-        ",",
-        ".",
-        "-",
-        "'",
-        '"',
-        "(",
-        ")",
-        "&",
-        "!",
-        "?",
-        ";",
-        "[",
-        "]",
-        "/",
-    ]
-
-    normalized_text = text.strip().upper()
-    for word in normalized_text:
-        if word in punctuation_list:
-            normalized_text = normalized_text.replace(word, " ")
-    if " " in normalized_text:
-        normalized_text = normalized_text.split()
-    elif normalized_text not in NORMALIZATION_MAP:
-        normalized_text = list(normalized_text)
-    else:
-        return [NORMALIZATION_MAP[normalized_text]]
-
+    normalized_text = remove_and_split_text(text)
     l, r = 0, 1
     while l < len(normalized_text):
         r = l + 1
@@ -107,6 +84,36 @@ def lexical_match(transcript: str, code: str) -> bool:
     transcript = normalize_transcript(transcript)
     transcript = change_list_to_str(transcript)
     return transcript == code
+
+
+def remove_and_split_text(text: str) -> list[str]:
+    punctuation_list = [
+        ",",
+        ".",
+        "-",
+        "'",
+        '"',
+        "(",
+        ")",
+        "&",
+        "!",
+        "?",
+        ";",
+        "[",
+        "]",
+        "/",
+    ]
+    normalized_text = text.strip().upper()
+    for word in normalized_text:
+        if word in punctuation_list:
+            normalized_text = normalized_text.replace(word, " ")
+    if " " in normalized_text:
+        normalized_text = normalized_text.split()
+    elif normalized_text not in NORMALIZATION_MAP:
+        normalized_text = list(normalized_text)
+    else:
+        return [NORMALIZATION_MAP[normalized_text]]
+    return normalized_text
 
 
 def main():
