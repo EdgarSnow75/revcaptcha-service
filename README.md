@@ -104,6 +104,29 @@ cd .\revcaptcha-service\src\revcaptcha\
 python audio.py
 ```
 
+## Lexical Gate passrates on Track H
+### Before Map Improvement
+#### Dev
+dev
+Pass Rate: 73.5%
+239 out of 325 passes
+
+#### Check
+check
+Pass Rate: 72.8%
+118 out of 162 passes
+
+### After Map Improvement
+#### Dev
+dev
+Pass Rate: 75.1%
+244 out of 325 passes
+
+#### Check
+check
+Pass Rate: 75.9%
+123 out of 162 passes
+
 ## Running the tests
 This is only for installations with development tools. Once you have completed the installation and setup, you can navigate into the tests folder by the following command:
 
