@@ -1,14 +1,13 @@
 import argparse
-from collections import Counter
 import json
-
+from collections import Counter
 
 from revcaptcha.challenge import is_valid_code
 from revcaptcha.text import (
+    NORMALIZATION_MAP,
     lexical_match,
     normalize_transcript,
     remove_and_split_text,
-    NORMALIZATION_MAP,
 )
 
 
