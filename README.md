@@ -1,6 +1,6 @@
 # revcaptcha-service
 
-A voice authentication system that uses the reverse voice CAPTCHA mechanism to authenticate users. It uses a two-stage sequential design which uses a lexical-matching stage and identity-matching stage to verify an authentication attempt. A user must enroll to the system by providing 3 to 10 voice recordings which are used as an enrollment centroid\vocal profile of that user. In an authentication attempt, the user first have to read out each letter of a randomized 5-character alphanumeric prompt that the system provides to them. The user must read out this prompt in 10 seconds. The lexical gate checks if the content of the user's audio and the randomized text prompt matches exactly. If so, the response audio will move on to the next stage, speaker verification. In speaker verification, a pre-trained speaker embedding model will turn the response audio into a fixed-length embedding. This embedding is scored against the target user's enrollment centroid embedding using cosine similarity. If the score is equal to higher than the threshold, that attempt is authenticated.
+A voice authentication system that uses the reverse voice CAPTCHA mechanism to authenticate users. It uses a two-stage sequential design which uses a lexical-matching stage and identity-matching stage to verify an authentication attempt. A user must enroll to the system by providing 5 or 10 voice recordings which are used as an enrollment centroid\vocal profile of that user. In an authentication attempt, the user first have to read out each letter of a randomized 5-character alphanumeric prompt that the system provides to them. The user must read out this prompt in 10 seconds. The lexical gate checks if the content of the user's audio and the randomized text prompt matches exactly. If so, the response audio will move on to the next stage, speaker verification. In speaker verification, a pre-trained speaker embedding model will turn the response audio into a fixed-length embedding. This embedding is scored against the target user's enrollment centroid embedding using cosine similarity. If the score is equal to higher than the threshold, that attempt is authenticated.
 
 ## Setup
 ### Environment setup
@@ -66,6 +66,15 @@ If you also want the development tools:
 ```
 pip install -e ".[dev]"
 ```
+**IMPORTANT:** Please check if both torch and torch audio are at versions 2.8.0 by using 
+```
+pip show torch torchaudio
+```
+If they are not, please reinstall using:
+```
+pip install torch=2.8.0 torchaudio=2.8.0
+```
+
 
 ## What works so far
 ### Code Generator
@@ -104,6 +113,38 @@ cd .\revcaptcha-service\src\revcaptcha\
 python audio.py
 ```
 
+### Transcriber 
+- Converts a valid audio file between 0.5s and 15.0s duration to a string that contains the spoken content
+- Uses the Whisper Small model from openai-whisper 
+```
+cd .\revcaptcha-service\src\revcaptcha\
+python asr.py
+```
+
+### Embedder
+- Converts an valid Numpy array or audio file to a (512,) shaped Numpy array
+    - First converts to a tensor using unsqueeze 
+    - Scales back to actual values by multiplying each sample with 32768
+    - Uses CAM++ model's extract_features_from_pcm method
+    - Converts back to an Numpy Array 
+```
+cd .\revcaptcha-service\src\revcaptcha\
+python speaker.py
+```
+
+### Scoring
+- Builds a voice profile using 5 or 10 enrollment clips of a user
+- Calculates the cosine similarity score between two embeddings 
+- Checks if the cosine score passes the threshold
+```
+cd .\revcaptcha-service\src\revcaptcha\
+python scoring.py
+```
+
+
+## Models
+Currently, we are using openai-whisper's Whisper Small model for our transcribing tasks and and English variant of CAM++ from the Hugging Face repository: ``` Wespeaker/wespeaker-voxceleb-campplus ```. The CAM++ models lives inside ``` models/campplus/ ```
+
 ## Lexical Gate passrates on Track H
 ### Before Map Improvement
 #### Dev
@@ -137,13 +178,23 @@ Pass Rate: 75.9%
 | CAM++ | 1 s | 36 | 553 | 9.30 | 0.046 | 0.041 |
 | CAM++ | 4 s | 36 | 553 | 9.30 | 0.095 | 0.090 |
 
+## Test Clips
+Inside tests\data, we have included clips that are under the license [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en). You can check the README.md files inside the folder for more details. 
+
 ## Running the tests
 This is only for installations with development tools. Once you have completed the installation and setup, you can navigate into the tests folder by the following command:
 
 For Windows:
 ```
 cd src\revcaptcha\tests\
-pytest test_text.py
+pytest 
 ```
+All 211 tests should pass
 
-All 18 tests should pass
+You can also test the Whisper and CAM++ models using the slow mode (which are deselected by default pytest calls) using:
+```
+pytest -m slow
+```
+All 7 tests should pass 
+
+**IMPORTANT:** Please be noted that sometimes a test or two may fail due to the transcription being different in each run. In that case, please rerun the tests again. 
