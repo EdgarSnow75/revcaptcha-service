@@ -127,6 +127,16 @@ check
 Pass Rate: 75.9%
 123 out of 162 passes
 
+## Peformance on My Machine
+**CPU**: AMD Ryzen 7 5700X 8-Core Processor 
+
+| Model | Input | Memory before (MB) | Memory after load (MB) | Load (s) | First call (s) | Average of next 10 (s) |
+|---|---|---:|---:|---:|---:|---:|
+| Whisper Small | 1 s | 36 | 1599 | 3.71 | 1.265 | 1.067 |
+| Whisper Small | 4 s | 36 | 1599 | 3.71 | 1.135 | 1.135 |
+| CAM++ | 1 s | 36 | 553 | 9.30 | 0.046 | 0.041 |
+| CAM++ | 4 s | 36 | 553 | 9.30 | 0.095 | 0.090 |
+
 ## Running the tests
 This is only for installations with development tools. Once you have completed the installation and setup, you can navigate into the tests folder by the following command:
 
