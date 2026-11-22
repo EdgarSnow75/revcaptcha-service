@@ -11,6 +11,8 @@ from revcaptcha.text import normalize_transcript
         ("5G5LB", ["5", "G", "5", "L", "B"]),
         ("won to for", ["1", "2", "4"]),
         ("seven", ["7"]),
+        ("and a x f m", ["N", "A", "X", "F", "M"]),
+        ("D F 5 E set", ["D", "F", "5", "E", "Z"]),
     ],
 )
 def test_normal_string(n, expected):
