@@ -68,20 +68,6 @@ def test_frozen_true():
                 expires_at=T0 + ANSWER_WINDOW,
             ),
             np.zeros(16000, dtype=np.float32),
-            "5 G 5 L P",
-            (0.6, 0.8),
-            0,
-            1,
-            Outcome.GATE_REJECTED,
-        ],
-        [
-            Challenge(
-                id="t1",
-                code="5G5LB",
-                issued_at=T0,
-                expires_at=T0 + ANSWER_WINDOW,
-            ),
-            np.zeros(16000, dtype=np.float32),
             "Five, G, five, L, B.",
             (1, 0),
             1,
@@ -122,12 +108,12 @@ def test_verify_simple(
     challenge, sample, code, embed, embed_count, transc_count, outcome
 ):
     embedder = FakeEmbedder(embed)
-    transcribber = FakeTranscriber(code)
+    transcriber = FakeTranscriber(code)
     result = verify_attempt(
         challenge,
         samples=sample,
         profile=np.array([0.6, 0.8], dtype="float32"),
-        transcriber=transcribber,
+        transcriber=transcriber,
         embedder=embedder,
         now=T0 + timedelta(seconds=9),
     )
@@ -135,9 +121,47 @@ def test_verify_simple(
     assert embedder.calls == embed_count
     if embedder.calls > 0:
         assert result.speaker_seconds is not None
-    assert transcribber.calls == transc_count
-    if transcribber.calls > 0:
+    assert transcriber.calls == transc_count
+    if transcriber.calls > 0:
         assert result.asr_seconds is not None
+
+
+@pytest.mark.parametrize(
+    "challenge, sample, code, embed, embed_count, transc_count, outcome",
+    (
+        [
+            Challenge(
+                id="t1",
+                code="5G5LB",
+                issued_at=T0,
+                expires_at=T0 + ANSWER_WINDOW,
+            ),
+            np.zeros(16000, dtype=np.float32),
+            "5 G 5 L P",
+            (0.6, 0.8),
+            0,
+            1,
+            Outcome.GATE_REJECTED,
+        ],
+    ),
+)
+def test_verify_gate_rejected(
+    challenge, sample, code, embed, embed_count, transc_count, outcome
+):
+    embedder = FakeEmbedder(embed)
+    transcriber = FakeTranscriber(code)
+    result = verify_attempt(
+        challenge,
+        samples=sample,
+        profile=np.array([0.6, 0.8], dtype="float32"),
+        transcriber=transcriber,
+        embedder=embedder,
+        now=T0 + timedelta(seconds=9),
+    )
+    assert result.outcome == outcome
+    assert embedder.calls == embed_count
+    assert result.score is None
+    assert result.transcript is not None
 
 
 @pytest.mark.parametrize(
@@ -179,18 +203,19 @@ def test_verify_score(
     challenge, sample, code, embed, embed_count, transc_count, outcome, score
 ):
     embedder = FakeEmbedder(embed)
-    transcribber = FakeTranscriber(code)
+    transcriber = FakeTranscriber(code)
     result = verify_attempt(
         challenge,
         samples=sample,
         profile=np.array([0.6, 0.8], dtype="float32"),
-        transcriber=transcribber,
+        transcriber=transcriber,
         embedder=embedder,
         now=T0 + timedelta(seconds=9),
     )
     assert result.outcome == outcome
     assert embedder.calls == embed_count
-    assert transcribber.calls == transc_count
+    assert transcriber.calls == transc_count
+    assert result.score == pytest.approx(score)
 
 
 @pytest.mark.parametrize(
@@ -217,19 +242,20 @@ def test_verify_strict_threshold(
     challenge, sample, code, embed, embed_count, transc_count, outcome, threshold
 ):
     embedder = FakeEmbedder(embed)
-    transcribber = FakeTranscriber(code)
+    transcriber = FakeTranscriber(code)
     result = verify_attempt(
         challenge,
         samples=sample,
         profile=np.array([0.6, 0.8], dtype="float32"),
-        transcriber=transcribber,
+        transcriber=transcriber,
         embedder=embedder,
         now=T0 + timedelta(seconds=9),
         threshold=threshold,
     )
     assert result.outcome == outcome
     assert embedder.calls == embed_count
-    assert transcribber.calls == transc_count
+    assert transcriber.calls == transc_count
+    assert result.threshold == threshold
 
 
 @pytest.mark.parametrize(
@@ -271,15 +297,19 @@ def test_verify_exact_time(
     challenge, sample, code, embed, embed_count, transc_count, outcome, finish_time
 ):
     embedder = FakeEmbedder(embed)
-    transcribber = FakeTranscriber(code)
+    transcriber = FakeTranscriber(code)
     result = verify_attempt(
         challenge,
         samples=sample,
         profile=np.array([0.6, 0.8], dtype="float32"),
-        transcriber=transcribber,
+        transcriber=transcriber,
         embedder=embedder,
         now=T0 + finish_time,
     )
     assert result.outcome == outcome
     assert embedder.calls == embed_count
-    assert transcribber.calls == transc_count
+    assert transcriber.calls == transc_count
+    if transcriber.calls == 0:
+        assert result.asr_seconds is None
+    if embedder.calls == 0:
+        assert result.speaker_seconds is None
