@@ -3,9 +3,8 @@ from dataclasses import dataclass
 from enum import StrEnum, auto
 
 from revcaptcha.challenge import is_expired
-from revcaptcha.scoring import DEFAULT_THRESHOLD
+from revcaptcha.scoring import DEFAULT_THRESHOLD, cosine_score, speaker_accepts
 from revcaptcha.text import lexical_match
-from revcaptcha.scoring import cosine_score, speaker_accepts
 
 
 class Outcome(StrEnum):
@@ -81,6 +80,3 @@ def verify_attempt(
         asr_seconds=transcription_total_time,
         speaker_seconds=embedding_total_time,
     )
-
-
-def main(): ...
