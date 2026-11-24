@@ -76,9 +76,9 @@ def test_code_validity(n, expected):
 def test_is_expired():
     c = create_challenge(rng=random.Random(7), now=T0)
     tick = timedelta(microseconds=1)
-    assert is_expired(c, c.expires_at - tick) == False
-    assert is_expired(c, c.expires_at + tick) == True
-    assert is_expired(c, c.expires_at) == False
+    assert not is_expired(c, c.expires_at - tick)
+    assert is_expired(c, c.expires_at + tick)
+    assert not is_expired(c, c.expires_at)
 
 
 def test_naive_time():
