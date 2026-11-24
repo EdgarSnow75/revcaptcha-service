@@ -4,6 +4,8 @@ import numpy as np
 
 from revcaptcha.audio import check_samples
 
+MODEL_NAME = "wespeaker-voxceleb-campplus"
+
 
 class Embedder(Protocol):
     def embed(self, samples: np.ndarray) -> np.ndarray: ...
