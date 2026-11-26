@@ -1,7 +1,7 @@
-import pytest
 import numpy as np
+import pytest
 
-from revcaptcha.mic import MicError, check_microphone, keep_recorded
+from revcaptcha.mic import check_microphone, keep_recorded
 
 
 @pytest.mark.parametrize(
