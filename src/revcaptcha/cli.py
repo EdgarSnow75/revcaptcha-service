@@ -1,7 +1,7 @@
 import argparse
 import sys
-
 from pathlib import Path
+
 from revcaptcha.audio import AudioError, load_audio
 from revcaptcha.scoring import THRESHOLDS, build_profile
 from revcaptcha.speaker import MODEL_NAME, CamppEmbedder
