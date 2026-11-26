@@ -1,7 +1,7 @@
-import pytest
 import numpy as np
+import pytest
 
-from revcaptcha.mic import MicError, check_microphone, keep_recorded
+from revcaptcha.mic import check_microphone, keep_recorded
 
 
 @pytest.mark.parametrize(
@@ -17,5 +17,6 @@ def test_keep_recorded(recording, seconds, expected):
     assert result.ndim == 1
 
 
+@pytest.mark.slow
 def test_check_input():
     assert check_microphone() == None
