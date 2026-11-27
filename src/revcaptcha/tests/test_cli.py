@@ -332,6 +332,8 @@ def test_attempt_no_mic(tmp_path, monkeypatch, ready_profile, capsys):
                 "attempt",
                 "--user",
                 "edgar",
+                "--campp-dir",
+                str(ready_profile),
             ]
         )
         == 2
