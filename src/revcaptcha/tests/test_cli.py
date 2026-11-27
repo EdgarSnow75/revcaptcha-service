@@ -1,13 +1,23 @@
 import shutil
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import numpy as np
 import pytest
 
 from revcaptcha import cli
+from revcaptcha.challenge import ANSWER_WINDOW, Challenge
+from revcaptcha.mic import MicError
 from revcaptcha.speaker import MODEL_NAME
-from revcaptcha.store import load_profile
+from revcaptcha.store import load_profile, save_profile
 from revcaptcha.tests.fakes import FakeEmbedder
+from revcaptcha.verify import Outcome, VerifyResult
+
+T0 = datetime(2026, 11, 27, 8, 0, tzinfo=UTC)
+
+
+def issue():
+    return Challenge(id="t1", code="5G5LB", issued_at=T0, expires_at=T0 + ANSWER_WINDOW)
 
 
 @pytest.fixture
@@ -49,7 +59,7 @@ def bad_model(*args, **kwargs):
         [[], 2],
     ),
 )
-def test_exit_code(argv, expected):
+def test_exit_code_enroll(argv, expected):
     with pytest.raises(SystemExit) as excinfo:
         cli.main(argv)
     print(excinfo)
@@ -76,7 +86,7 @@ def test_enroll_wrong_count(file_names, tmp_path, capsys, no_model):
                 "--user",
                 "edgar",
                 "--clips",
-                "nope",
+                str(clips),
             ]
         )
         == 2
@@ -179,3 +189,174 @@ def test_enroll_no_model(tmp_path, monkeypatch, five_clips, capsys):
     captured = capsys.readouterr()
     assert "no model files" in captured.err
     assert captured.out == ""
+
+
+@pytest.mark.parametrize(
+    "result, arrive_time, results_text",
+    (
+        [
+            VerifyResult(
+                outcome=Outcome.ACCEPTED,
+                transcript="5G5LB.",
+                score=0.7123,
+                threshold=0.5387,
+                asr_seconds=1.42,
+                speaker_seconds=0.19,
+            ),
+            T0 + timedelta(seconds=4.2),
+            "ACCEPTED",
+        ],
+        [
+            VerifyResult(
+                outcome=Outcome.EXPIRED,
+                transcript=None,
+                score=None,
+                threshold=0.5387,
+                asr_seconds=None,
+                speaker_seconds=11.0,
+            ),
+            T0 + timedelta(seconds=11),
+            "EXPIRED",
+        ],
+        [
+            VerifyResult(
+                outcome=Outcome.GATE_REJECTED,
+                transcript="5 G 5 L P",
+                score=None,
+                threshold=0.5387,
+                asr_seconds=1.3,
+                speaker_seconds=None,
+            ),
+            T0 + timedelta(seconds=5),
+            "GATE_REJECTED",
+        ],
+        [
+            VerifyResult(
+                outcome=Outcome.SPEAKER_REJECTED,
+                transcript="5 G 5 L P",
+                score=0.3100,
+                threshold=0.5387,
+                asr_seconds=1.3,
+                speaker_seconds=0.2,
+            ),
+            T0 + timedelta(seconds=5),
+            "SPEAKER_REJECTED",
+        ],
+    ),
+)
+def test_format_results(result, arrive_time, results_text):
+    assert results_text in cli.format_result(
+        challenge=issue(), arrived_at=arrive_time, result=result
+    )
+
+
+# attempt subcommand
+@pytest.fixture
+def ready_profile(tmp_path):
+    path = Path(tmp_path / "data" / "profiles")
+    save_profile(
+        path,
+        "edgar",
+        np.array([0.6, 0.8], dtype=np.float32),
+        model=MODEL_NAME,
+        clips=["0.wav", "1.wav", "2.wav", "3.wav", "4.wav"],
+    )
+    campp_dir = tmp_path / "campplus"
+    campp_dir.mkdir(exist_ok=True)
+    (campp_dir / "avg_model.pt").touch()
+    (campp_dir / "config.yaml").touch()
+    return campp_dir
+
+
+def bad_mic(*args, **kwargs):
+    raise MicError("no input device")
+
+
+def bad_whisper_model(*args, **kwargs):
+    raise RuntimeError("cannot load")
+
+
+@pytest.mark.parametrize(
+    "value, expected, err_text",
+    (["1.5", 2, "outside -1, 1"], ["abc", 2, "is not a number"]),
+)
+def test_exit_code_attempt(value, expected, err_text, capsys):
+    with pytest.raises(SystemExit) as excinfo:
+        cli.main(["attempt", "--user", "edgar", "--threshold", value])
+    print(excinfo)
+    captured = capsys.readouterr()
+    assert excinfo.value.code == expected
+    assert err_text in captured.err
+
+
+@pytest.mark.parametrize(
+    "user, err_text",
+    (["edgar", "profile is not found"], ["Edgar", "User name is invalid"]),
+)
+def test_attempt_no_profile(tmp_path, capsys, user, err_text):
+    assert cli.main(["--data", str(tmp_path / "data"), "attempt", "--user", user]) == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert err_text in captured.err
+
+
+def test_attempt_missing_model(tmp_path, ready_profile, capsys):
+    file_path = Path(ready_profile / "config.yaml")
+    file_path.unlink(missing_ok=True)
+    data_path = Path(tmp_path / "data")
+    assert (
+        cli.main(
+            [
+                "--data",
+                str(data_path),
+                "attempt",
+                "--user",
+                "edgar",
+                "--campp-dir",
+                str(ready_profile),
+            ]
+        )
+        == 2
+    )
+    captured = capsys.readouterr()
+    assert "not found in the model files" in captured.err
+
+
+def test_attempt_no_mic(tmp_path, monkeypatch, ready_profile, capsys):
+    monkeypatch.setattr(cli, "check_microphone", bad_mic)
+    assert (
+        cli.main(
+            [
+                "--data",
+                str(tmp_path / "data"),
+                "attempt",
+                "--user",
+                "edgar",
+            ]
+        )
+        == 2
+    )
+    captured = capsys.readouterr()
+    assert "Not a valid mic input\n" in captured.err
+    assert captured.out == ""
+
+
+def test_attempt_model_load(tmp_path, ready_profile, monkeypatch):
+    monkeypatch.setattr(cli, "check_microphone", lambda: None)
+    monkeypatch.setattr(cli, "WhisperTranscriber", bad_whisper_model)
+    assert (
+        cli.main(
+            [
+                "--data",
+                str(tmp_path / "data"),
+                "attempt",
+                "--user",
+                "edgar",
+                "--threshold",
+                "0.5",
+                "--campp-dir",
+                str(ready_profile),
+            ]
+        )
+        == 3
+    )
