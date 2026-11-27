@@ -52,7 +52,7 @@ def resample_khz(audio, sample_rate):
 
 def check_samples(samples):
     if not isinstance(samples, np.ndarray):
-        raise ValueError("The samples is not a ndarray")
+        raise ValueError("The samples is not a ndarray")  # noqa TRY004
     elif samples.ndim != 1:
         raise ValueError("The sample's ndim is not 1-D")
     elif samples.dtype != "float32":

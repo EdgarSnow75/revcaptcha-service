@@ -32,6 +32,9 @@ classifiers = [
     "Programming Language :: Python"
 ]
 
+[project.scripts]
+revcaptcha = "revcaptcha.cli:main"
+
 [project.optional-dependencies]
 dev = ["pytest", "ruff", "psutil"]
 
