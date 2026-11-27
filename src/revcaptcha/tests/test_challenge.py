@@ -83,7 +83,7 @@ def test_is_expired():
 
 def test_naive_time():
     with pytest.raises(ValueError):
-        create_challenge(random.Random(7), datetime(2026, 11, 11, 9, 0))
+        create_challenge(random.Random(7), datetime(2026, 11, 11, 9, 0))  # noqa DTZ001 - Create naive time
 
 
 def test_same_code_same_seed():
